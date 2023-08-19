@@ -15,7 +15,9 @@ class ClientProtocol(asyncio.Protocol):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         show_info(STATUS.CONNECTED, self.address)
-        transport.write(self.message)
+        print(type(self.message))
+        print(self.message)
+        transport.write(bytes(self.message, encoding='utf-8'))
         show_info(STATUS.SEND, self.address, self.message)
 
     def data_received(self, data):

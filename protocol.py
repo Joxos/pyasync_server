@@ -13,7 +13,7 @@ def change_question_mark(sentence):
 
 def pack_json(obj):
     message = json.dumps(obj)
-    return bytes(f'{len(message)}:{message}', encoding='utf-8')
+    return f'{len(message)}:{message}'
 
 
 def pack_change_question_mark(sentence):
