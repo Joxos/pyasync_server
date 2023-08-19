@@ -1,3 +1,4 @@
+from asyncio import run
 from loguru import logger
 from enum import Enum, auto
 from sys import stderr
@@ -29,3 +30,17 @@ def show_info(direction, address, message=''):
         logger.info(f'--- {address} {message}')
     elif direction == STATUS.DISCONNECTED:
         logger.info(f'-x- {address} {message}')
+
+
+def split_package(data):
+    index = data.find(':')
+    return (int(data[:index]), data[index + 1:])
+
+
+def handle_run_main(main):
+    try:
+        run(main())
+    except KeyboardInterrupt:
+        logger.info('User exit.')
+    except ConnectionRefusedError:
+        logger.error(f'{server_address} refused to accept a connection.')

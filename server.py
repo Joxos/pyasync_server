@@ -17,12 +17,9 @@ class ServerProtocol(asyncio.Protocol):
         self.data += data.decode('utf-8')
         # get package length first
         if not self.current_package_length and ':' in self.data:
-            index = self.data.find(':')
-            self.current_package_length, self.data = int(
-                self.data[:index]), self.data[index + 1:]
+            self.current_package_length, self.data = split_package(self.data)
         # package length satisfied
-        if len(self.data) != 0 and len(
-                self.data) == self.current_package_length:
+        if len(self.data) and len(self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
             self.transport.write(bytes(res, encoding=default_coding))
@@ -43,7 +40,4 @@ async def main():
 
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        logger.info('User exit.')
+    handle_run_main(main)

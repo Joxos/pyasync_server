@@ -2,13 +2,15 @@ import json
 from enum import Enum, auto
 
 
+# protocol content
+def change_question_mark(sentence):
+    return sentence[:-1] + '!'
+
+
+# packers
 class PACKAGE(Enum):
     CHANGE_QUESTION_MARK = auto()
     ANSWER_CHANGE_QUESTION_MARK = auto()
-
-
-def change_question_mark(sentence):
-    return sentence[:-1] + '!'
 
 
 def pack_json(obj):
