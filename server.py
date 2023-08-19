@@ -4,7 +4,7 @@ import asyncio
 
 
 # callback style server:
-class EchoServerProtocol(asyncio.Protocol):
+class ServerProtocol(asyncio.Protocol):
 
     def connection_made(self, transport):
         self.data = ''
@@ -27,7 +27,7 @@ class EchoServerProtocol(asyncio.Protocol):
 
 async def main():
     loop = asyncio.get_running_loop()
-    server = await loop.create_server(lambda: EchoServerProtocol(),
+    server = await loop.create_server(lambda: ServerProtocol(),
                                       server_address[0], server_address[1])
     logger.info(f'Listening at {server_address}')
     async with server:

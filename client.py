@@ -3,7 +3,7 @@ import asyncio, time
 
 
 # callback style client:
-class EchoClientProtocol(asyncio.Protocol):
+class ClientProtocol(asyncio.Protocol):
 
     def __init__(self, message, on_con_lost):
         self.message = message
@@ -35,7 +35,7 @@ async def main():
     message = 'Hello there?'
 
     transport, protocol = await loop.create_connection(
-        lambda: EchoClientProtocol(message, on_con_lost), server_address[0],
+        lambda: ClientProtocol(message, on_con_lost), server_address[0],
         server_address[1])
 
     try:

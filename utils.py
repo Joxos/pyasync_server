@@ -27,4 +27,4 @@ def show_info(direction, address, message=''):
     elif direction == STATUS.CONNECTED:
         logger.info(f'--- {address} {message}')
     elif direction == STATUS.DISCONNECTED:
-        logger.info(f'- - {address} {message}')
+        logger.info(f'-x- {address} {message}')
