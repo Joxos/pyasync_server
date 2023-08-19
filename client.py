@@ -1,26 +1,37 @@
 from utils import *
+from protocol import pack_change_question_mark, unpack_and_process
 import asyncio, time
 
 
-# callback style client:
 class ClientProtocol(asyncio.Protocol):
 
     def __init__(self, message, on_con_lost):
         self.message = message
         self.on_con_lost = on_con_lost
         self.data = ''
+        self.current_package_length = False
 
     def connection_made(self, transport):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         show_info(STATUS.CONNECTED, self.address)
-        transport.write(self.message.encode('utf-8'))
+        transport.write(self.message)
         show_info(STATUS.SEND, self.address, self.message)
 
     def data_received(self, data):
         self.data += data.decode('utf-8')
-        if self.data.endswith('!'):
+        # get package length first
+        if not self.current_package_length and ':' in self.data:
+            index = self.data.find(':')
+            self.current_package_length, self.data = int(
+                self.data[:index]), self.data[index + 1:]
+        # package length satisfied
+        if len(self.data) != 0 and len(
+                self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
+            res = unpack_and_process(self.data)
+            self.transport.write(bytes(res, encoding='utf-8'))
+            show_info(STATUS.SEND, self.address, res)
             self.transport.close()
 
     def connection_lost(self, exc):
@@ -32,7 +43,7 @@ async def main():
     loop = asyncio.get_running_loop()
 
     on_con_lost = loop.create_future()
-    message = 'Hello there?'
+    message = pack_change_question_mark('Hello there?')
 
     transport, protocol = await loop.create_connection(
         lambda: ClientProtocol(message, on_con_lost), server_address[0],
@@ -48,4 +59,4 @@ if __name__ == '__main__':
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print('User exit.')
+        logger.info('User exit.')

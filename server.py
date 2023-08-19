@@ -1,5 +1,5 @@
 from utils import *
-import protocol
+from protocol import unpack_and_process
 import asyncio
 
 
@@ -10,14 +10,22 @@ class ServerProtocol(asyncio.Protocol):
         self.data = ''
         self.transport = transport
         self.address = transport.get_extra_info('peername')
+        self.current_package_length = False
         show_info(STATUS.CONNECTED, self.address)
 
     def data_received(self, data):
         self.data += data.decode('utf-8')
-        if self.data.endswith('?'):
+        # get package length first
+        if not self.current_package_length and ':' in self.data:
+            index = self.data.find(':')
+            self.current_package_length, self.data = int(
+                self.data[:index]), self.data[index + 1:]
+        # package length satisfied
+        if len(self.data) != 0 and len(
+                self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
-            res = protocol.change_question_mark(self.data)
-            self.transport.write(bytes(res, encoding='utf-8'))
+            res = unpack_and_process(self.data)
+            self.transport.write(res)
             show_info(STATUS.SEND, self.address, res)
             self.transport.close()
 
