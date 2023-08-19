@@ -15,8 +15,6 @@ class ClientProtocol(asyncio.Protocol):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         show_info(STATUS.CONNECTED, self.address)
-        print(type(self.message))
-        print(self.message)
         transport.write(bytes(self.message, encoding=default_coding))
         show_info(STATUS.SEND, self.address, self.message)
 
@@ -33,7 +31,7 @@ class ClientProtocol(asyncio.Protocol):
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
             self.transport.write(bytes(res, encoding=default_coding))
-            show_info(STATUS.SEND, self.address, res)
+            show_info(STATUS.RECV, self.address, res)
             self.transport.close()
 
     def connection_lost(self, exc):
@@ -62,3 +60,5 @@ if __name__ == '__main__':
         asyncio.run(main())
     except KeyboardInterrupt:
         logger.info('User exit.')
+    except ConnectionRefusedError:
+        logger.error(f'{server_address} refused to accept a connection.')
