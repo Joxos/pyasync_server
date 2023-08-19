@@ -17,7 +17,7 @@ class ClientProtocol(asyncio.Protocol):
         show_info(STATUS.CONNECTED, self.address)
         print(type(self.message))
         print(self.message)
-        transport.write(bytes(self.message, encoding='utf-8'))
+        transport.write(bytes(self.message, encoding=default_coding))
         show_info(STATUS.SEND, self.address, self.message)
 
     def data_received(self, data):
@@ -32,7 +32,7 @@ class ClientProtocol(asyncio.Protocol):
                 self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
-            self.transport.write(bytes(res, encoding='utf-8'))
+            self.transport.write(bytes(res, encoding=default_coding))
             show_info(STATUS.SEND, self.address, res)
             self.transport.close()
 

@@ -25,7 +25,7 @@ class ServerProtocol(asyncio.Protocol):
                 self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
-            self.transport.write(bytes(res, encoding='utf-8'))
+            self.transport.write(bytes(res, encoding=default_coding))
             show_info(STATUS.SEND, self.address, res)
             self.transport.close()
 
