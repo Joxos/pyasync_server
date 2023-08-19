@@ -1,4 +1,4 @@
-from utils import logger, server_address
+from utils import *
 import asyncio, time
 
 
@@ -13,18 +13,19 @@ class EchoClientProtocol(asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
-        logger.info(f'--- {self.address}')
+        show_info(STATUS.CONNECTED, self.address)
         transport.write(self.message.encode('utf-8'))
-        logger.info(f'--> {self.address}: {self.message}')
+        show_info(STATUS.SEND, self.address, self.message)
 
     def data_received(self, data):
         self.data += data.decode('utf-8')
         if self.data.endswith('!'):
             logger.info(f'<-- {self.address}: {self.data}')
+            show_info(STATUS.RECV, self.address, self.data)
             self.transport.close()
 
     def connection_lost(self, exc):
-        logger.info(f'- - {self.address}')
+        show_info(STATUS.DISCONNECTED, self.address)
         self.on_con_lost.set_result(True)
 
 
