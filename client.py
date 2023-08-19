@@ -20,7 +20,6 @@ class EchoClientProtocol(asyncio.Protocol):
     def data_received(self, data):
         self.data += data.decode('utf-8')
         if self.data.endswith('!'):
-            logger.info(f'<-- {self.address}: {self.data}')
             show_info(STATUS.RECV, self.address, self.data)
             self.transport.close()
 
