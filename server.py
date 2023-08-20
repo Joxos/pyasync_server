@@ -14,7 +14,7 @@ class ServerProtocol(asyncio.Protocol):
         show_info(STATUS.CONNECTED, self.address)
 
     def data_received(self, data):
-        self.data += data.decode('utf-8')
+        self.data += decompress(data).decode('utf-8')
         # get package length first
         if not self.current_package_length and ':' in self.data:
             self.current_package_length, self.data = split_package(self.data)
@@ -22,7 +22,7 @@ class ServerProtocol(asyncio.Protocol):
         if len(self.data) and len(self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
-            self.transport.write(bytes(res, encoding=default_coding))
+            self.transport.write(compress(bytes(res, encoding=default_coding)))
             show_info(STATUS.SEND, self.address, res)
             self.transport.close()
 

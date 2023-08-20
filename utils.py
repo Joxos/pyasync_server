@@ -1,7 +1,9 @@
+from config import *
 from asyncio import run
 from loguru import logger
 from enum import Enum, auto
 from sys import stderr
+from importlib import import_module
 
 logger.remove()
 logger.add(
@@ -10,8 +12,22 @@ logger.add(
     format="<green>{time}</green> <level>{message}</level>",
 )
 
-server_address = ('127.0.0.1', 1145)
-default_coding = 'utf-8'
+logger.info(f'{compresser.name.lower()} compress selected.')
+if compresser == COMPRESSER.ZLIB:
+    from zlib import compress, decompress
+elif compresser == COMPRESSER.GZIP:
+    from gzip import compress, decompress
+elif compresser == COMPRESSER.BZ2:
+    from bz2 import compress, decompress
+elif compresser == COMPRESSER.LZMA:
+    from lzma import compress, decompress
+elif compresser == COMPRESSER.NONE:
+
+    def compress(b):
+        return b
+
+    def decompress(b):
+        return b
 
 
 class STATUS(Enum):
