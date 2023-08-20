@@ -12,7 +12,7 @@ logger.add(
     format="<green>{time}</green> <level>{message}</level>",
 )
 
-logger.info(f'{compresser.name.lower()} compress selected.')
+logger.info(f'{compresser.name.lower().title()} compress selected.')
 if compresser == COMPRESSER.ZLIB:
     from zlib import compress, decompress
 elif compresser == COMPRESSER.GZIP:
@@ -23,11 +23,11 @@ elif compresser == COMPRESSER.LZMA:
     from lzma import compress, decompress
 elif compresser == COMPRESSER.NONE:
 
-    def compress(b):
-        return b
+    def compress(m):
+        return m
 
-    def decompress(b):
-        return b
+    def decompress(m):
+        return m
 
 
 class STATUS(Enum):

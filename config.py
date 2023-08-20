@@ -2,11 +2,11 @@ from enum import Enum, auto
 
 
 class COMPRESSER(Enum):
+    NONE = auto()
     ZLIB = auto()
     GZIP = auto()
     BZ2 = auto()
     LZMA = auto()
-    NONE = auto()
 
 
 compresser = COMPRESSER.NONE
