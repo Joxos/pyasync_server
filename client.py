@@ -25,7 +25,8 @@ class ClientProtocol(asyncio.Protocol):
         if not self.current_package_length and ':' in self.data:
             self.current_package_length, self.data = split_package(self.data)
         # package length satisfied
-        if len(self.data) and len(self.data) == self.current_package_length:
+        if len(self.data) != 0 and len(
+                self.data) == self.current_package_length:
             show_info(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
             self.transport.write(compress(bytes(res, encoding=default_coding)))
