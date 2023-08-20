@@ -1,14 +1,15 @@
-import asyncio, time
-from client import main
-from utils import handle_run_main
+import time
 from threading import Thread
 
-request_num = 1000
+from client import main
+from utils import handle_run_main
+
+REQUEST_NUM = 1000
 
 if __name__ == '__main__':
     threads = [
         Thread(target=handle_run_main, args=(main, ))
-        for _ in range(request_num)
+        for _ in range(REQUEST_NUM)
     ]
     start = time.time()
     for thread in threads:

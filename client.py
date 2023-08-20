@@ -1,6 +1,7 @@
-from utils import *
+import asyncio
+
 from protocol import pack_change_question_mark, unpack_and_process
-import asyncio, time
+from utils import *
 
 
 class ClientProtocol(asyncio.Protocol):

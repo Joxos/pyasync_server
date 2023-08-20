@@ -1,6 +1,7 @@
-from utils import *
-from protocol import unpack_and_process
 import asyncio
+
+from protocol import unpack_and_process
+from utils import *
 
 
 # callback style server:

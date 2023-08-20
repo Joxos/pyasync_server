@@ -1,9 +1,11 @@
-from config import *
 from asyncio import run
-from loguru import logger
 from enum import Enum, auto
-from sys import stderr
 from importlib import import_module
+from sys import stderr
+
+from loguru import logger
+
+from config import *
 
 logger.remove()
 logger.add(
