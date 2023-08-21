@@ -163,3 +163,4 @@ cython_debug/
 *.~undo-tree~
 *~
 *#
+future/
