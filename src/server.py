@@ -1,6 +1,7 @@
 import asyncio
 
-from protocol import unpack_and_process, is_framed, on_init
+from protocol import *
+from actions import unpack_and_process
 from utils import *
 
 
@@ -8,23 +9,24 @@ from utils import *
 class ServerProtocol(asyncio.Protocol):
 
     def connection_made(self, transport):
-        self.data = ''
+        self.recieved_data = ''
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         on_init(self)
         show_status(STATUS.CONNECTED, self.address)
 
-    def data_received(self, data):
+    def data_received(self, more_data):
         try:
-            self.data += decompress(data).decode('utf-8')
+            self.recieved_data += decompress(more_data).decode('utf-8')
         except:
             show_status(STATUS.ERROR, self.address,
-                        'Failed to decompress or decode.')
+                        'Failed to decompress or decode more data.')
             self.transport.close()
             return
         if is_framed(self):
-            show_status(STATUS.RECV, self.address, self.data)
-            res = unpack_and_process(self.data)
+            show_status(STATUS.RECV, self.address, self.recieved_data)
+            # transfer control to actions.py
+            res = unpack_and_process(self.recieved_data)
             self.transport.write(compress(bytes(res, encoding=default_coding)))
             show_status(STATUS.SEND, self.address, res)
             self.transport.close()

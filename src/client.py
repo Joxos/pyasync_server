@@ -1,6 +1,7 @@
 import asyncio
 
-from protocol import unpack_and_process, pack_change_question_mark, is_framed, on_init
+from protocol import *
+from actions import unpack_and_process
 from utils import *
 
 
@@ -9,8 +10,7 @@ class ClientProtocol(asyncio.Protocol):
     def __init__(self, message, on_con_lost):
         self.message = message
         self.on_con_lost = on_con_lost
-        self.data = ''
-        self.current_package_length = False
+        self.recieved_data = ''
         on_init(self)
 
     def connection_made(self, transport):
@@ -20,17 +20,17 @@ class ClientProtocol(asyncio.Protocol):
         transport.write(compress(bytes(self.message, encoding=default_coding)))
         show_status(STATUS.SEND, self.address, self.message)
 
-    def data_received(self, data):
+    def data_received(self, more_data):
         try:
-            self.data += decompress(data).decode('utf-8')
+            self.recieved_data += decompress(more_data).decode('utf-8')
         except:
             show_status(STATUS.ERROR, self.address,
                         'Failed to decompress or decode.')
             self.transport.close()
             return
         if is_framed(self):
-            show_status(STATUS.RECV, self.address, self.data)
-            res = unpack_and_process(self.data)
+            show_status(STATUS.RECV, self.address, self.recieved_data)
+            res = unpack_and_process(self.recieved_data)
             self.transport.write(compress(bytes(res, encoding=default_coding)))
             show_status(STATUS.RECV, self.address, res)
             self.transport.close()
