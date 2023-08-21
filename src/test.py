@@ -1,3 +1,0 @@
-from protocol import unpack_and_process
-
-print(unpack_and_process.__qualname__)
