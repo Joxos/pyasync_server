@@ -1,6 +1,6 @@
 import asyncio
 
-from protocol import unpack_and_process
+from protocol import unpack_and_process, is_framed, on_init
 from utils import *
 
 
@@ -11,7 +11,7 @@ class ServerProtocol(asyncio.Protocol):
         self.data = ''
         self.transport = transport
         self.address = transport.get_extra_info('peername')
-        self.current_package_length = False
+        on_init(self)
         show_status(STATUS.CONNECTED, self.address)
 
     def data_received(self, data):
@@ -19,15 +19,10 @@ class ServerProtocol(asyncio.Protocol):
             self.data += decompress(data).decode('utf-8')
         except:
             show_status(STATUS.ERROR, self.address,
-                      'Failed to decompress or decode.')
+                        'Failed to decompress or decode.')
             self.transport.close()
             return
-        # get package length first
-        if not self.current_package_length and ':' in self.data:
-            self.current_package_length, self.data = split_package(self.data)
-        # package length satisfied
-        if len(self.data) != 0 and len(
-                self.data) == self.current_package_length:
+        if is_framed(self):
             show_status(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
             self.transport.write(compress(bytes(res, encoding=default_coding)))

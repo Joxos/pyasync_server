@@ -53,11 +53,6 @@ def show_status(direction, address, message=''):
         logger.error(f'xxx {address} {message}')
 
 
-def split_package(data):
-    index = data.find(':')
-    return (int(data[:index]), data[index + 1:])
-
-
 def handle_run_main(main):
     try:
         run(main())
