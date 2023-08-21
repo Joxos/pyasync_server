@@ -37,6 +37,7 @@ class STATUS(Enum):
     RECV = auto()
     CONNECTED = auto()
     DISCONNECTED = auto()
+    ERROR = auto()
 
 
 def show_info(direction, address, message=''):
@@ -48,6 +49,8 @@ def show_info(direction, address, message=''):
         logger.info(f'--- {address} {message}')
     elif direction == STATUS.DISCONNECTED:
         logger.info(f'-x- {address} {message}')
+    elif direction == STATUS.ERROR:
+        logger.error(f'xxx {address} {message}')
 
 
 def split_package(data):

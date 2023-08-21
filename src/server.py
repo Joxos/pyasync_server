@@ -15,7 +15,13 @@ class ServerProtocol(asyncio.Protocol):
         show_info(STATUS.CONNECTED, self.address)
 
     def data_received(self, data):
-        self.data += decompress(data).decode('utf-8')
+        try:
+            self.data += decompress(data).decode('utf-8')
+        except:
+            show_info(STATUS.ERROR, self.address,
+                      'Failed to decompress or decode.')
+            self.transport.close()
+            return
         # get package length first
         if not self.current_package_length and ':' in self.data:
             self.current_package_length, self.data = split_package(self.data)
