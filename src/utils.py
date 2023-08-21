@@ -40,7 +40,7 @@ class STATUS(Enum):
     ERROR = auto()
 
 
-def show_info(direction, address, message=''):
+def show_status(direction, address, message=''):
     if direction == STATUS.RECV:
         logger.info(f'<-- {address} {message}')
     elif direction == STATUS.SEND:

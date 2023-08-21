@@ -15,15 +15,15 @@ class ClientProtocol(asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
-        show_info(STATUS.CONNECTED, self.address)
+        show_status(STATUS.CONNECTED, self.address)
         transport.write(compress(bytes(self.message, encoding=default_coding)))
-        show_info(STATUS.SEND, self.address, self.message)
+        show_status(STATUS.SEND, self.address, self.message)
 
     def data_received(self, data):
         try:
             self.data += decompress(data).decode('utf-8')
         except:
-            show_info(STATUS.ERROR, self.address,
+            show_status(STATUS.ERROR, self.address,
                       'Failed to decompress or decode.')
             self.transport.close()
             return
@@ -33,14 +33,14 @@ class ClientProtocol(asyncio.Protocol):
         # package length satisfied
         if len(self.data) != 0 and len(
                 self.data) == self.current_package_length:
-            show_info(STATUS.RECV, self.address, self.data)
+            show_status(STATUS.RECV, self.address, self.data)
             res = unpack_and_process(self.data)
             self.transport.write(compress(bytes(res, encoding=default_coding)))
-            show_info(STATUS.RECV, self.address, res)
+            show_status(STATUS.RECV, self.address, res)
             self.transport.close()
 
     def connection_lost(self, exc):
-        show_info(STATUS.DISCONNECTED, self.address)
+        show_status(STATUS.DISCONNECTED, self.address)
         self.on_con_lost.set_result(True)
 
 
