@@ -1,7 +1,4 @@
 from package import *
-from actions import unpack_and_process
-from utils import show_status, STATUS, compress, decompress
-from config import default_coding
 
 
 # low-level protocol content
