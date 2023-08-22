@@ -1,3 +1,6 @@
+'''
+package.py: Define the format of different packages and ways to parse them.
+'''
 import json
 from enum import Enum, auto
 

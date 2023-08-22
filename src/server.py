@@ -1,3 +1,6 @@
+'''
+server.py: High-performance async server codes.
+'''
 import asyncio
 
 from protocol import on_init, is_framed

@@ -1,3 +1,6 @@
+'''
+client.py: High-performance async client codes.
+'''
 import asyncio
 
 from protocol import on_init, is_framed

@@ -1,7 +1,9 @@
+'''
+protocol.py: Define how to frame a package.
+'''
 from package import *
 
 
-# low-level protocol content
 def on_init(sp):
     sp.current_package_length = False
 
