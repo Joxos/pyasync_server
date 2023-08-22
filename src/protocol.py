@@ -16,8 +16,5 @@ def is_framed(sp):
     # package length satisfied
     if len(sp.recieved_data) != 0 and len(
             sp.recieved_data) == sp.current_package_length:
-        show_status(STATUS.RECV, sp.address, sp.recieved_data)
-        res = unpack_and_process(sp.recieved_data)
-        sp.transport.write(compress(bytes(res, encoding=default_coding)))
-        show_status(STATUS.SEND, sp.address, res)
-        sp.transport.close()
+        return True
+    return False
