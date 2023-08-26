@@ -17,3 +17,8 @@ def is_framed(sp):
             sp.recieved_data) == sp.current_package_length:
         return True
     return False
+
+
+def split_package(data):
+    index = data.find(':')
+    return (int(data[:index]), data[index + 1:])

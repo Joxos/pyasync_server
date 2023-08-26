@@ -5,7 +5,6 @@ import json
 from enum import Enum, auto
 
 
-# low-level packers
 class PACKAGE(Enum):
     CHANGE_QUESTION_MARK = auto()
     ANSWER_CHANGE_QUESTION_MARK = auto()
@@ -15,11 +14,6 @@ class PACKAGE(Enum):
 def pack_json(obj):
     message = json.dumps(obj)
     return f'{len(message)}:{message}'
-
-
-def split_package(data):
-    index = data.find(':')
-    return (int(data[:index]), data[index + 1:])
 
 
 # high-level package format defined here

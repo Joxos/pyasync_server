@@ -1,5 +1,5 @@
 '''
-actions.py: Actions to process after recieved packages.
+actions.py: Main logic of actions to process after recieved packages.
 '''
 import json
 from package import *
