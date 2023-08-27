@@ -1,21 +1,27 @@
 '''
 actions.py: Main logic of actions to process after recieved packages.
 '''
-import json
-from package import *
+from utils import logger
+import mariadb
 
 
 def change_question_mark(sentence):
     return sentence[:-1] + '!'
 
 
-def unpack_and_process(package):
-    '''Main logic to process every package.'''
-    package = json.loads(package)
-    if package.get('type') == PACKAGE.CHANGE_QUESTION_MARK.name:
-        return pack_answer_change_question_mark(
-            change_question_mark(package.get('sentence')))
-    elif package.get('type') == PACKAGE.ANSWER_CHANGE_QUESTION_MARK.name:
-        return package.get('sentence')
-    else:
-        return pack_unknown_package_type()
+def mariadb_test(sql):
+    try:
+        conn = mariadb.connect(user='root',
+                               password='123456',
+                               host='192.168.2.115',
+                               port=3306)
+    except mariadb.Error as e:
+        logger.error(f'Error connecting to MariaDB: {e}')
+        return
+    logger.info(f'Successfully connected to MariaDB.')
+    cur = conn.cursor()
+    cur.execute(sql)
+    res = ''
+    for d in cur:
+        res += d[0] + '\n'
+    return res

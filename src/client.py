@@ -5,15 +5,15 @@ import asyncio
 import ssl
 
 from protocol import on_init, is_framed
-from actions import unpack_and_process, pack_change_question_mark
+from package import unpack_and_process, pack_mariadb_test
 from utils import *
 from client_config import *
 
 
 class ClientProtocol(asyncio.Protocol):
 
-    def __init__(self, message, on_con_lost):
-        self.message = message
+    def __init__(self, package_to_send, on_con_lost):
+        self.package_to_send = package_to_send
         self.on_con_lost = on_con_lost
         self.recieved_data = ''
         on_init(self)
@@ -22,8 +22,9 @@ class ClientProtocol(asyncio.Protocol):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
         show_status(STATUS.CONNECTED, self.address)
-        transport.write(compress(bytes(self.message, encoding=default_coding)))
-        show_status(STATUS.SEND, self.address, self.message)
+        transport.write(
+            compress(bytes(self.package_to_send, encoding=default_coding)))
+        show_status(STATUS.SEND, self.address, self.package_to_send)
 
     def data_received(self, more_data):
         try:
@@ -61,17 +62,17 @@ async def main():
 
     loop = asyncio.get_running_loop()
     on_con_lost = loop.create_future()
-    message = pack_change_question_mark('Hello there?')
+    mypackage = pack_mariadb_test('show databases')
 
     if enable_tls:
         transport, protocol = await loop.create_connection(
-            lambda: ClientProtocol(message, on_con_lost),
+            lambda: ClientProtocol(mypackage, on_con_lost),
             server_address[0],
             server_address[1],
             ssl=context)
     else:
         transport, protocol = await loop.create_connection(
-            lambda: ClientProtocol(message, on_con_lost),
+            lambda: ClientProtocol(mypackage, on_con_lost),
             server_address[0],
             server_address[1],
         )
