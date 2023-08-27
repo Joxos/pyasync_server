@@ -7,6 +7,8 @@ import ssl
 from protocol import on_init, is_framed
 from actions import unpack_and_process, pack_change_question_mark
 from utils import *
+from config import *
+from client_config import *
 
 
 class ClientProtocol(asyncio.Protocol):
@@ -45,19 +47,35 @@ class ClientProtocol(asyncio.Protocol):
 
 
 async def main():
-    context = ssl.create_default_context()
-    context.check_hostname = False
-    context.load_verify_locations('server.crt')
-    loop = asyncio.get_running_loop()
+    if enable_tls:
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        try:
+            context.load_verify_locations(crt_path)
+        except FileNotFoundError:
+            logger.error(f'File missing when using TLS.')
+            return
+        else:
+            logger.info('TLS enabled.')
+    else:
+        logger.warning('TLS not enabled.')
 
+    loop = asyncio.get_running_loop()
     on_con_lost = loop.create_future()
     message = pack_change_question_mark('Hello there?')
 
-    transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(message, on_con_lost),
-        server_address[0],
-        server_address[1],
-        ssl=context)
+    if enable_tls:
+        transport, protocol = await loop.create_connection(
+            lambda: ClientProtocol(message, on_con_lost),
+            server_address[0],
+            server_address[1],
+            ssl=context)
+    else:
+        transport, protocol = await loop.create_connection(
+            lambda: ClientProtocol(message, on_con_lost),
+            server_address[0],
+            server_address[1],
+        )
 
     try:
         await on_con_lost
@@ -66,4 +84,4 @@ async def main():
 
 
 if __name__ == '__main__':
-    handle_run_main(main)
+    handle_run_main(main, server_address)

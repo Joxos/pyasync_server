@@ -14,5 +14,5 @@ class COMPRESSER(Enum):
 
 # configuration starts here
 compresser = COMPRESSER.NONE
-server_address = ('127.0.0.1', 1145)
 default_coding = 'utf-8'
+enable_tls = False

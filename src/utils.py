@@ -56,10 +56,15 @@ def show_status(direction, address, message=''):
         logger.error(f'xxx {address} {message}')
 
 
-def handle_run_main(main):
+def handle_run_main(main, server_address):
     try:
         run(main())
     except KeyboardInterrupt:
         logger.info('User exit.')
     except ConnectionRefusedError:
         logger.error(f'{server_address} refused to accept a connection.')
+    except ConnectionResetError:
+        logger.error(f'Connection to {server_address} was reset.')
+        logger.info(
+            'This might caused by that TLS support is enabled on the server but not on client.'
+        )

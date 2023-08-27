@@ -7,6 +7,8 @@ import ssl
 from protocol import on_init, is_framed
 from actions import unpack_and_process
 from utils import *
+from config import *
+from server_config import *
 
 
 # callback style server:
@@ -40,18 +42,37 @@ class ServerProtocol(asyncio.Protocol):
 
 
 async def main():
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    context.check_hostname = False
-    context.load_cert_chain('server.crt', 'server.key')
+    if enable_tls:
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.check_hostname = False
+        try:
+            context.load_cert_chain(crt_path, key_path)
+        except FileNotFoundError:
+            logger.error(f'File missing when using TLS.')
+            return
+        else:
+            logger.info('TLS enabled.')
+    else:
+        logger.warning('TLS not enabled.')
+
     loop = asyncio.get_running_loop()
-    server = await loop.create_server(lambda: ServerProtocol(),
-                                      server_address[0],
-                                      server_address[1],
-                                      ssl=context)
+
+    if enable_tls:
+        server = await loop.create_server(lambda: ServerProtocol(),
+                                          server_address[0],
+                                          server_address[1],
+                                          ssl=context)
+    else:
+        server = await loop.create_server(
+            lambda: ServerProtocol(),
+            server_address[0],
+            server_address[1],
+        )
+
     logger.info(f'Listening at {server_address}')
     async with server:
         await server.serve_forever()
 
 
 if __name__ == '__main__':
-    handle_run_main(main)
+    handle_run_main(main, server_address)

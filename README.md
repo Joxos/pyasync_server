@@ -13,6 +13,8 @@ An async server realization using `asyncio` in python.
 
 ## TLS Support
 
+TLS is disabled by default. To enable it, follow the instructions below:
+
 Use this command to generate keys and certification annually:
 
 ```bash
@@ -27,6 +29,8 @@ openssl req -newkey rsa:2048 -nodes -keyout server.key -x509 -days 365 -out serv
 Make sure your client and server use the same `server.crt`.
 
 DO NOT DISTRIBUTE YOUR `server.key`!!!
+
+At last, modify `enable_tls` to `True` in `config.py`.
 
 ## TODOs
 
