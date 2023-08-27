@@ -2,7 +2,7 @@
 actions.py: Main logic of actions to process after recieved packages.
 '''
 from utils import logger
-import mariadb
+from mariadb import connect, Error
 
 
 def change_question_mark(sentence):
@@ -11,11 +11,11 @@ def change_question_mark(sentence):
 
 def mariadb_test(sql):
     try:
-        conn = mariadb.connect(user='root',
-                               password='123456',
-                               host='192.168.2.115',
-                               port=3306)
-    except mariadb.Error as e:
+        conn = connect(user='root',
+                       password='123456',
+                       host='192.168.2.115',
+                       port=3306)
+    except Error as e:
         logger.error(f'Error connecting to MariaDB: {e}')
         return
     logger.info(f'Successfully connected to MariaDB.')
