@@ -11,9 +11,24 @@ An async server realization using `asyncio` in python.
 - benchmark.py
 - compresser_benchmark.py
 
+## TLS Support
+
+Use this command to generate keys and certification annually:
+
+```bash
+openssl req -newkey rsa:2048 -nodes -keyout server.key -x509 -days 365 -out server.crt -batch
+```
+
+- -x509: to generate self-signed certification
+- -days: period of validity
+- -nodes: don't encrypt the private key
+- -batch: use default of configured settings instead of getting them interactively
+
+Make sure your client and server use the same `server.crt`.
+
+DO NOT DISTRIBUTE YOUR `server.key`!!!
+
 ## TODOs
 
 1. Compression threshold
 2. Compression benchmark
-3. Handle errors of differet compression types
-4. TSL support
