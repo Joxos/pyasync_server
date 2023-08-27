@@ -12,6 +12,11 @@ class COMPRESSER(Enum):
     LZMA = auto()
 
 
+class SQLTYPE(Enum):
+    MYSQL = auto()
+    MARIADB = auto()
+
+
 # configuration starts here
 compresser = COMPRESSER.NONE
 default_coding = 'utf-8'

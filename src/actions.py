@@ -2,7 +2,11 @@
 actions.py: Main logic of actions to process after recieved packages.
 '''
 from utils import logger
-from mariadb import connect, Error
+from server_config import *
+if sql_type == SQLTYPE.MYSQL:
+    from pymysql import connect, Error
+elif sql_type == SQLTYPE.MARIADB:
+    from mariadb import connect, Error
 
 
 def change_question_mark(sentence):
@@ -11,10 +15,10 @@ def change_question_mark(sentence):
 
 def mariadb_test(sql):
     try:
-        conn = connect(user='root',
-                       password='123456',
-                       host='192.168.2.115',
-                       port=3306)
+        conn = connect(user=sql_user,
+                       password=sql_password,
+                       host=sql_address,
+                       port=sql_port)
     except Error as e:
         logger.error(f'Error connecting to MariaDB: {e}')
         return
