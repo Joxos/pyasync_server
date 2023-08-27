@@ -13,16 +13,17 @@ def change_question_mark(sentence):
     return sentence[:-1] + '!'
 
 
-def mariadb_test(sql):
+def database_test(sql):
     try:
         conn = connect(user=sql_user,
                        password=sql_password,
                        host=sql_address,
                        port=sql_port)
     except Error as e:
-        logger.error(f'Error connecting to MariaDB: {e}')
+        logger.error(
+            f'Error connecting to {sql_type.name.lower().title()}: {e}')
         return
-    logger.info(f'Successfully connected to MariaDB.')
+    logger.info(f'Successfully connected to {sql_type.name.lower().title()}.')
     cur = conn.cursor()
     cur.execute(sql)
     res = ''

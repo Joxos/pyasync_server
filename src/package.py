@@ -56,7 +56,7 @@ def unpack_and_process(package):
     elif package_type == PACKAGE.ANSWER_CHANGE_QUESTION_MARK.name:
         return package.get('sentence')
     elif package_type == PACKAGE.MARIADB_TEST.name:
-        return pack_answer_mariadb_test(mariadb_test(package.get('sql')))
+        return pack_answer_mariadb_test(database_test(package.get('sql')))
     elif package_type == PACKAGE.ANSWER_MARIADB_TEST.name:
         return package.get('result')
     else:
