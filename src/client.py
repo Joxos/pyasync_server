@@ -2,6 +2,7 @@
 client.py: High-performance async client codes.
 '''
 import asyncio
+import ssl
 
 from protocol import on_init, is_framed
 from actions import unpack_and_process, pack_change_question_mark
@@ -44,14 +45,19 @@ class ClientProtocol(asyncio.Protocol):
 
 
 async def main():
+    context = ssl.create_default_context()
+    context.check_hostname = False
+    context.load_verify_locations('server.crt')
     loop = asyncio.get_running_loop()
 
     on_con_lost = loop.create_future()
     message = pack_change_question_mark('Hello there?')
 
     transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(message, on_con_lost), server_address[0],
-        server_address[1])
+        lambda: ClientProtocol(message, on_con_lost),
+        server_address[0],
+        server_address[1],
+        ssl=context)
 
     try:
         await on_con_lost

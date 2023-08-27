@@ -2,6 +2,7 @@
 server.py: High-performance async server codes.
 '''
 import asyncio
+import ssl
 
 from protocol import on_init, is_framed
 from actions import unpack_and_process
@@ -39,9 +40,14 @@ class ServerProtocol(asyncio.Protocol):
 
 
 async def main():
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.check_hostname = False
+    context.load_cert_chain('server.crt', 'server.key')
     loop = asyncio.get_running_loop()
     server = await loop.create_server(lambda: ServerProtocol(),
-                                      server_address[0], server_address[1])
+                                      server_address[0],
+                                      server_address[1],
+                                      ssl=context)
     logger.info(f'Listening at {server_address}')
     async with server:
         await server.serve_forever()
