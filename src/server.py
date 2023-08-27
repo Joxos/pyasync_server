@@ -7,7 +7,6 @@ import ssl
 from protocol import on_init, is_framed
 from actions import unpack_and_process
 from utils import *
-from config import *
 from server_config import *
 
 
