@@ -2,11 +2,20 @@
 actions.py: Main logic of actions to process after recieved packages.
 '''
 from utils import logger
+from sys import exit
 from server_config import *
 if sql_type == SQLTYPE.MYSQL:
     from pymysql import connect, Error
 elif sql_type == SQLTYPE.MARIADB:
     from mariadb import connect, Error
+elif sql_type == SQLTYPE.NONE:
+
+    def connect(**kwargs):
+        logger.error('No SQL selected. Cannot publish any connection.')
+        exit(-1)
+
+    class Error(Exception):
+        pass
 
 
 def change_question_mark(sentence):

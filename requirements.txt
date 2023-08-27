@@ -1,2 +1,4 @@
 loguru
-mariadb
+# SQL Support
+# pymysql
+# mariadb

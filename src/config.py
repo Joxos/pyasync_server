@@ -13,6 +13,7 @@ class COMPRESSER(Enum):
 
 
 class SQLTYPE(Enum):
+    NONE=auto()
     MYSQL = auto()
     MARIADB = auto()
 
