@@ -71,4 +71,4 @@ Finally, use `connect()` to visit your database and do what you want.
 ## TODOs
 
 1. Compression threshold
-2. Compression benchmark
+2. MQ and Cluster support
