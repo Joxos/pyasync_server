@@ -50,6 +50,7 @@ class ClientProtocol(asyncio.Protocol):
 
 
 async def main():
+    context = None
     if enable_tls:
         context = ssl.create_default_context()
         context.check_hostname = False
@@ -67,18 +68,11 @@ async def main():
     on_con_lost = loop.create_future()
     mypackage = pack_request_change_question_mark('show databases?')
 
-    if enable_tls:
-        transport, protocol = await loop.create_connection(
-            lambda: ClientProtocol(mypackage, on_con_lost),
-            server_address[0],
-            server_address[1],
-            ssl=context)
-    else:
-        transport, protocol = await loop.create_connection(
-            lambda: ClientProtocol(mypackage, on_con_lost),
-            server_address[0],
-            server_address[1],
-        )
+    transport, protocol = await loop.create_connection(
+        lambda: ClientProtocol(mypackage, on_con_lost),
+        server_address[0],
+        server_address[1],
+        ssl=context)
 
     try:
         await on_con_lost

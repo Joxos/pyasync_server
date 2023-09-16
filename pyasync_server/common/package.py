@@ -10,6 +10,7 @@ def pack_json(obj):
     return f'{len(message)}:{message}'
 
 
+# package declaration
 class PACKAGE(Enum):
     UNKNOWN_PACKAGE_TYPE = auto()
     REQUEST_CHANGE_QUESTION_MARK = auto()

@@ -21,4 +21,4 @@ class SQLTYPE(Enum):
 # configuration starts here
 compresser = COMPRESSER.NONE
 default_coding = 'utf-8'
-enable_tls = False
+enable_tls = True
