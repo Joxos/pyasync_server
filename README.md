@@ -13,11 +13,11 @@ An async server realization using `asyncio` in python.
 
 ## Adding a New Action
 
-Adding a new action in `pyasync_server` could be no more easier with folloing steps:
+Adding a new action in `pyasync_server` could be no more easier with following steps:
 
 1. Define a function in `actions.py`.
 
-   The arguments reveal data you need when executing the action. Pay attention to them is quite useful when defining the package structure later.
+   The arguments reveal data you need when executing the action. Paying attention to them is quite useful when defining the package structure later.
 
 2. Add new package type in `package.py`.
 
@@ -27,7 +27,7 @@ Adding a new action in `pyasync_server` could be no more easier with folloing st
 
    2. Define functions to pack your new packages.
 
-      For example, `MARIADB_TEST` and `ANSWER_MARIADB_TEST`.
+      For example, `REQUEST_MARIADB_TEST` and `ANSWER_MARIADB_TEST`.
 
 3. Add a new flow in `unpack_and_process()` in `actions.py`
 

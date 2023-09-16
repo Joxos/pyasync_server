@@ -31,7 +31,7 @@ def database_test(sql):
     except Error as e:
         logger.error(
             f'Error connecting to {sql_type.name.lower().title()}: {e}')
-        return
+        return ''
     logger.info(f'Successfully connected to {sql_type.name.lower().title()}.')
     cur = conn.cursor()
     cur.execute(sql)

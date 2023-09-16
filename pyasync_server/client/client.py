@@ -9,7 +9,7 @@ sys.path.append('..')
 from common.protocol import on_init, is_framed
 from common.utils import *
 
-from package import unpack_and_process, pack_request_change_question_mark
+from package import *
 from config import *
 
 
@@ -66,7 +66,7 @@ async def main():
 
     loop = asyncio.get_running_loop()
     on_con_lost = loop.create_future()
-    mypackage = pack_request_change_question_mark('show databases?')
+    mypackage = pack_request_mariadb_test('show databases')
 
     transport, protocol = await loop.create_connection(
         lambda: ClientProtocol(mypackage, on_con_lost),
