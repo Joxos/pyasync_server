@@ -3,13 +3,11 @@ utils.py: Common utils defines here.
 '''
 from asyncio import run
 from enum import Enum, auto
-from importlib import import_module
 from sys import stderr
-
 from loguru import logger
+from config import *
 
-from .config import *
-
+# logger settings
 logger.remove()
 logger.add(
     stderr,
@@ -35,6 +33,7 @@ elif compresser == COMPRESSER.NONE:
         return m
 
 
+# console banners
 class STATUS(Enum):
     SEND = auto()
     RECV = auto()
@@ -56,6 +55,7 @@ def show_status(direction, address, message=''):
         logger.error(f'xxx {address} {message}')
 
 
+# console exception handler
 def handle_run_main(main, server_address):
     try:
         run(main())

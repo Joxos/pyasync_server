@@ -2,9 +2,7 @@
 package.py: Define the format of different packages and ways to parse them.
 '''
 import json
-from enum import Enum, auto
 from common.package import pack_json, PACKAGE
-from actions import *
 
 
 def pack_unknown_package_type():
