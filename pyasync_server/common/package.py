@@ -16,3 +16,7 @@ class PACKAGE(Enum):
     REQUEST_MARIADB_TEST = auto()
     ANSWER_CHANGE_QUESTION_MARK = auto()
     ANSWER_MARIADB_TEST = auto()
+
+
+def pack_unknown_package_type():
+    return pack_json({'type': PACKAGE.UNKNOWN_PACKAGE_TYPE.name})

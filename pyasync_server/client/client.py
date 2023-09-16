@@ -7,8 +7,9 @@ import sys
 
 sys.path.append('..')
 from common.protocol import on_init, is_framed
-from package import unpack_and_process, pack_request_change_question_mark
 from common.utils import *
+
+from package import unpack_and_process, pack_request_change_question_mark
 from config import *
 
 

@@ -3,11 +3,7 @@ package.py: Define the format of different packages and ways to parse them.
 '''
 import json
 from actions import *
-from common.package import pack_json, PACKAGE
-
-
-def pack_unknown_package_type():
-    return pack_json({'type': PACKAGE.UNKNOWN_PACKAGE_TYPE.name})
+from common.package import *
 
 
 def pack_answer_change_question_mark(sentence):
