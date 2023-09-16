@@ -8,7 +8,7 @@ from sys import stderr
 
 from loguru import logger
 
-from config import *
+from .config import *
 
 logger.remove()
 logger.add(

@@ -3,11 +3,14 @@ server.py: High-performance async server codes.
 '''
 import asyncio
 import ssl
+import sys
 
-from protocol import on_init, is_framed
+sys.path.append('..')
+from common.protocol import on_init, is_framed
 from package import unpack_and_process
-from utils import *
-from server_config import *
+from common.utils import *
+from config import *
+from actions import *
 
 
 # callback style server:

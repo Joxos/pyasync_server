@@ -1,9 +1,9 @@
 '''
 actions.py: Main logic of actions to process after recieved packages.
 '''
-from utils import logger
+from common.utils import logger
 from sys import exit
-from server_config import *
+from config import *
 if sql_type == SQLTYPE.MYSQL:
     from pymysql import connect, Error
 elif sql_type == SQLTYPE.MARIADB:

@@ -3,11 +3,13 @@ client.py: High-performance async client codes.
 '''
 import asyncio
 import ssl
+import sys
 
-from protocol import on_init, is_framed
-from package import unpack_and_process, pack_mariadb_test
-from utils import *
-from client_config import *
+sys.path.append('..')
+from common.protocol import on_init, is_framed
+from package import unpack_and_process, pack_request_change_question_mark
+from common.utils import *
+from config import *
 
 
 class ClientProtocol(asyncio.Protocol):
@@ -62,7 +64,7 @@ async def main():
 
     loop = asyncio.get_running_loop()
     on_con_lost = loop.create_future()
-    mypackage = pack_mariadb_test('show databases')
+    mypackage = pack_request_change_question_mark('show databases?')
 
     if enable_tls:
         transport, protocol = await loop.create_connection(
