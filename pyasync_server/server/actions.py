@@ -38,4 +38,4 @@ def database_test(sql):
     res = ''
     for d in cur:
         res += d[0] + '\n'
-    return res
+    return res[:-1]

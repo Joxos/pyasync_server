@@ -5,7 +5,6 @@ import json
 from common.package import *
 
 
-
 def pack_request_change_question_mark(sentence):
     return pack_json({
         'type': PACKAGE.REQUEST_CHANGE_QUESTION_MARK.name,
@@ -24,6 +23,6 @@ def unpack_and_process(package):
     if package_type == PACKAGE.ANSWER_CHANGE_QUESTION_MARK.name:
         return package.get('sentence')
     elif package_type == PACKAGE.ANSWER_MARIADB_TEST.name:
-        return package.get('result')
+        return '\n' + package.get('result')
     else:
         return pack_unknown_package_type()
