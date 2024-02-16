@@ -6,6 +6,7 @@ from enum import Enum, auto
 from sys import stderr
 from loguru import logger
 from common.config import *
+import ssl
 
 # logger settings
 logger.remove()
@@ -68,3 +69,23 @@ def handle_run_main(main, server_address):
         logger.info(
             "This might caused by that TLS support is enabled on the server but not on client."
         )
+
+def send_package(transport, package):
+    transport.write(compress(bytes(package, encoding=DEFAULT_CODING)))
+    show_status(STATUS.SEND, transport.get_extra_info("peername"), package)
+
+def resolve_client_ssl_context(certfile):
+    context = None
+    if ENABLE_TLS:
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        try:
+            context.load_verify_locations(certfile)
+        except FileNotFoundError:
+            logger.error("File missing when using TLS.")
+            return
+        else:
+            logger.info("TLS enabled.")
+    else:
+        logger.warning("TLS not enabled.")
+    return context
