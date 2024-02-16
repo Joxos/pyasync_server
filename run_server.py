@@ -5,7 +5,8 @@ import ssl
 import sys
 
 sys.path.append("..")
-from common.utils import handle_run_main, logger
+from common.utils import handle_run_main
+from loguru import logger
 from server.config import (
     ENABLE_TLS,
     CRT_PATH,

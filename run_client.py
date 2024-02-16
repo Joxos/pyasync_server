@@ -1,7 +1,8 @@
 """
 client.py: High-performance async client codes.
 """
-from common.utils import handle_run_main, logger
+from common.utils import handle_run_main
+from loguru import logger
 from client.package import pack_request_login
 from client.config import SERVER_ADDRESS, ENABLE_TLS, CRT_PATH
 import asyncio

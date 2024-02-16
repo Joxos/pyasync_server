@@ -2,7 +2,7 @@
 package.py: Define the format of different packages and ways to parse them.
 """
 import json
-from common.package import *
+from common.package import pack_json, PACKAGE
 
 
 def pack_request_change_question_mark(sentence):

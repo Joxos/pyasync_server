@@ -5,7 +5,7 @@ from sys import exit
 import json
 import os
 from server.config import *
-from common.utils import logger
+from loguru import logger
 
 # resolve SQL connection
 if SQL_TYPE == SQLTYPE.MYSQL:
@@ -44,8 +44,6 @@ def database_test(sql):
 
 
 # write your own actions here
-
-
 def login(username, password):
     if not os.path.exists("users.json"):
         return False
