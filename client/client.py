@@ -1,23 +1,13 @@
-"""
-client.py: High-performance async client codes.
-"""
 import asyncio
-import ssl
-import sys
-
-sys.path.append("..")
-
 from common.protocol import on_init, is_framed
 from common.utils import (
     show_status,
     compress,
     decompress,
     STATUS,
-    handle_run_main,
-    logger,
 )
-from client.package import *
-from client.config import *
+from client.package import unpack_and_process
+from client.config import DEFAULT_CODING
 
 
 class ClientProtocol(asyncio.Protocol):
@@ -50,39 +40,3 @@ class ClientProtocol(asyncio.Protocol):
     def connection_lost(self, exc):
         show_status(STATUS.DISCONNECTED, self.address)
         self.on_con_lost.set_result(True)
-
-
-async def main():
-    context = None
-    if ENABLE_TLS:
-        context = ssl.create_default_context()
-        context.check_hostname = False
-        try:
-            context.load_verify_locations(CRT_PATH)
-        except FileNotFoundError:
-            logger.error("File missing when using TLS.")
-            return
-        else:
-            logger.info("TLS enabled.")
-    else:
-        logger.warning("TLS not enabled.")
-
-    loop = asyncio.get_running_loop()
-    on_con_lost = loop.create_future()
-    mypackage = pack_request_register("Joxos", "114514")
-
-    transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(mypackage, on_con_lost),
-        SERVER_ADDRESS[0],
-        SERVER_ADDRESS[1],
-        ssl=context,
-    )
-
-    try:
-        await on_con_lost
-    finally:
-        transport.close()
-
-
-if __name__ == "__main__":
-    handle_run_main(main, SERVER_ADDRESS)

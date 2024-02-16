@@ -1,4 +1,5 @@
 from common.config import *
+from enum import Enum, auto
 
 
 class SQLTYPE(Enum):

@@ -1,11 +1,4 @@
-"""
-server.py: High-performance async server codes.
-"""
 import asyncio
-import ssl
-import sys
-
-sys.path.append("..")
 
 from common.protocol import on_init, is_framed
 from common.utils import (
@@ -13,8 +6,6 @@ from common.utils import (
     compress,
     decompress,
     STATUS,
-    handle_run_main,
-    logger,
 )
 from server.package import unpack_and_process
 from server.config import *
@@ -48,32 +39,3 @@ class ServerProtocol(asyncio.Protocol):
 
     def connection_lost(self, exc):
         show_status(STATUS.DISCONNECTED, self.address)
-
-
-async def main():
-    context = None
-    if ENABLE_TLS:
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        context.check_hostname = False
-        try:
-            context.load_cert_chain(CRT_PATH, KEY_PATH)
-        except FileNotFoundError:
-            logger.error("File missing when using TLS.")
-            return
-        else:
-            logger.info("TLS enabled.")
-    else:
-        logger.warning("TLS not enabled.")
-
-    loop = asyncio.get_running_loop()
-    server = await loop.create_server(
-        lambda: ServerProtocol(), SERVER_ADDRESS[0], SERVER_ADDRESS[1], ssl=context
-    )
-
-    logger.info(f"Listening at {SERVER_ADDRESS}")
-    async with server:
-        await server.serve_forever()
-
-
-if __name__ == "__main__":
-    handle_run_main(main, SERVER_ADDRESS)

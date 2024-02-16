@@ -6,7 +6,7 @@ from utils import handle_run_main
 
 REQUEST_NUM = 1000
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     threads = [
         Thread(target=handle_run_main, args=(main, server_address))
         for _ in range(REQUEST_NUM)
@@ -16,4 +16,4 @@ if __name__ == '__main__':
         thread.start()
     for thread in threads:
         thread.join()
-    print(f'{time.time()-start} seconds used.')
+    print(f"{time.time()-start} seconds used.")
