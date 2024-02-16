@@ -14,7 +14,7 @@ from server.config import *
 # callback style server:
 class ServerProtocol(asyncio.Protocol):
     def connection_made(self, transport):
-        self.recieved_data = ""
+        self.received_data = ""
         self.transport = transport
         self.address = transport.get_extra_info("peername")
         on_init(self)
@@ -22,7 +22,7 @@ class ServerProtocol(asyncio.Protocol):
 
     def data_received(self, more_data):
         try:
-            self.recieved_data += decompress(more_data).decode("utf-8")
+            self.received_data += decompress(more_data).decode("utf-8")
         except:
             show_status(
                 STATUS.ERROR, self.address, "Failed to decompress or decode more data."
@@ -30,9 +30,9 @@ class ServerProtocol(asyncio.Protocol):
             self.transport.close()
             return
         if is_framed(self):
-            show_status(STATUS.RECV, self.address, self.recieved_data)
+            show_status(STATUS.RECV, self.address, self.received_data)
             # transfer control to actions.py
-            res = unpack_and_process(self.recieved_data)
+            res = unpack_and_process(self.received_data)
             self.transport.write(compress(bytes(res, encoding=DEFAULT_CODING)))
             show_status(STATUS.SEND, self.address, res)
             self.transport.close()

@@ -4,11 +4,12 @@ client.py: High-performance async client codes.
 from common.utils import handle_run_main
 from loguru import logger
 from client.package import pack_request_login
-from client.config import SERVER_ADDRESS, ENABLE_TLS, CRT_PATH
+from client.config import SERVER_ADDRESS, CRT_PATH
+from common.config import ENABLE_TLS
 import asyncio
 import ssl
 
-from client.client import ClientProtocol
+from client.client import send_simple_package
 
 
 async def main():
@@ -26,21 +27,8 @@ async def main():
     else:
         logger.warning("TLS not enabled.")
 
-    loop = asyncio.get_running_loop()
-    on_con_lost = loop.create_future()
     mypackage = pack_request_login("Joxos", "114514")
-
-    transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(mypackage, on_con_lost),
-        SERVER_ADDRESS[0],
-        SERVER_ADDRESS[1],
-        ssl=context,
-    )
-
-    try:
-        await on_con_lost
-    finally:
-        transport.close()
+    await send_simple_package(mypackage, SERVER_ADDRESS, context)
 
 
 if __name__ == "__main__":

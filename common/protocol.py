@@ -8,12 +8,12 @@ def on_init(sp):
 
 
 def is_framed(sp):
-    if not sp.current_package_length and ":" in sp.recieved_data:
-        sp.current_package_length, sp.recieved_data = split_package(sp.recieved_data)
+    if not sp.current_package_length and ":" in sp.received_data:
+        sp.current_package_length, sp.received_data = split_package(sp.received_data)
     # package length satisfied
     if (
-        len(sp.recieved_data) != 0
-        and len(sp.recieved_data) == sp.current_package_length
+        len(sp.received_data) != 0
+        and len(sp.received_data) == sp.current_package_length
     ):
         return True
     return False

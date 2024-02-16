@@ -7,7 +7,7 @@ An async server realization using `asyncio` in python.
 - server.py: High-performance async server codes.
 - client.py: High-performance async client codes.
 - package.py: Define the format of different packages and ways to parse them.
-- actions.py: Main logic of actions to process after recieved packages.
+- actions.py: Main logic of actions to process after received packages.
 - protocol.py: Define how to frame a package.
 - utils.py: Common utils defines here.
 

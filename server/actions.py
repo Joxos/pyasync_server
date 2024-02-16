@@ -1,5 +1,5 @@
 """
-actions.py: Main logic of actions to process after recieved packages.
+actions.py: Main logic of actions to process after received packages.
 """
 from sys import exit
 import json
