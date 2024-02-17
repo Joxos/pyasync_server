@@ -1,36 +1,19 @@
 """
-server.py: High-performance async server codes.
+run_server.py: An example of how to run the server.
 """
-import ssl
-import sys
-
-sys.path.append("..")
-from common.utils import handle_run_main
+from pyasync_server.common.utils import handle_run_main, resolve_server_ssl_context
 from loguru import logger
-from server.config import (
-    ENABLE_TLS,
+from pyasync_server.server.config import (
     CRT_PATH,
     KEY_PATH,
     SERVER_ADDRESS,
 )
 import asyncio
-from server.server import ServerProtocol
+from pyasync_server.server.server import ServerProtocol
 
 
 async def main():
-    context = None
-    if ENABLE_TLS:
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        context.check_hostname = False
-        try:
-            context.load_cert_chain(CRT_PATH, KEY_PATH)
-        except FileNotFoundError:
-            logger.error("File missing when using TLS.")
-            return
-        else:
-            logger.info("TLS enabled.")
-    else:
-        logger.warning("TLS not enabled.")
+    context = resolve_server_ssl_context(CRT_PATH, KEY_PATH)
 
     loop = asyncio.get_running_loop()
     server = await loop.create_server(

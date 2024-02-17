@@ -4,7 +4,7 @@ actions.py: Main logic of actions to process after received packages.
 from sys import exit
 import json
 import os
-from server.config import *
+from pyasync_server.server.config import *
 from loguru import logger
 
 # resolve SQL connection

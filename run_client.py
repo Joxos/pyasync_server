@@ -1,19 +1,18 @@
 """
-client.py: High-performance async client codes.
+run_client.py: An example of how to run a client.
 """
-from common.utils import handle_run_main,resolve_client_ssl_context
-from loguru import logger
-from client.package import pack_request_login
-from client.config import SERVER_ADDRESS, CRT_PATH
+from pyasync_server.common.utils import handle_run_main, resolve_client_ssl_context
+from pyasync_server.client.package import pack_request_login
+from pyasync_server.client.config import SERVER_ADDRESS, CRT_PATH
+from pyasync_server.client.client import send_simple_package
 
-from client.client import send_simple_package
 
 
 async def main():
-    context = resolve_client_ssl_context(CRT_PATH)
+    ssl_context = resolve_client_ssl_context(CRT_PATH)
     mypackage = pack_request_login("Joxos", "114514")
-    result = await send_simple_package(mypackage, SERVER_ADDRESS, context)
-    print(result)
+    result = await send_simple_package(mypackage, SERVER_ADDRESS, ssl_context)
+    print(result.result())
 
 
 if __name__ == "__main__":

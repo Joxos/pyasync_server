@@ -1,4 +1,4 @@
-from common.config import *
+from pyasync_server.common.config import *
 from enum import Enum, auto
 
 

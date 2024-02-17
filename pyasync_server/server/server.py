@@ -1,14 +1,16 @@
+"""
+server.py: High-performance async server codes.
+"""
 import asyncio
 
-from common.protocol import on_init, is_framed
-from common.utils import (
+from pyasync_server.common.protocol import on_init, is_framed
+from pyasync_server.common.logging import (
     show_status,
-    compress,
-    decompress,
     STATUS,
 )
-from server.package import unpack_and_process
-from server.config import *
+from pyasync_server.common.compress import compress, decompress
+from pyasync_server.server.package import unpack_and_process
+from pyasync_server.server.config import *
 
 
 # callback style server:

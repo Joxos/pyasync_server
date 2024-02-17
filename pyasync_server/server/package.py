@@ -2,8 +2,13 @@
 package.py: Define the format of different packages and ways to parse them.
 """
 import json
-from server.actions import change_question_mark, database_test, login, register
-from common.package import pack_json, PACKAGE, pack_unknown_package_type
+from pyasync_server.server.actions import (
+    change_question_mark,
+    database_test,
+    login,
+    register,
+)
+from pyasync_server.common.package import pack_json, PACKAGE, pack_unknown_package_type
 
 
 def pack_answer_change_question_mark(sentence):

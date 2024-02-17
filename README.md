@@ -31,6 +31,13 @@ Adding a new action in `pyasync_server` could be no more easier with following s
 
 3. Add a new flow in `unpack_and_process()` in `actions.py`
 
+## Client User Guide
+
+You probably need following functions in `common.utils` before using the client:
+
+- `handle_run_main()`: Run the main function in cli environment with simple error handling and logging.
+- `resolve_client_ssl_context()`: Resolve the SSL context for client connection. (Optional)
+
 ## TLS Support
 
 TLS is disabled by default. To enable it, follow the instructions below:

@@ -1,18 +1,20 @@
+"""
+client.py: High-performance async client codes.
+"""
 import asyncio
-from common.protocol import on_init, is_framed
-from common.utils import (
-    show_status,
-    decompress,
-    STATUS,
+from pyasync_server.common.protocol import on_init, is_framed
+from pyasync_server.common.utils import (
     send_package,
 )
-from client.package import unpack_and_process
-from common.config import DEFAULT_CODING
+from pyasync_server.common.logging import show_status, STATUS
+from pyasync_server.common.compress import decompress
+from pyasync_server.client.package import unpack_and_process
 
 
 class ClientProtocol(asyncio.Protocol):
     """Simple client protocol that can send packages and receive packages."""
-    def __init__(self,result, is_lost):
+
+    def __init__(self, result, is_lost):
         self.is_lost = is_lost
         self.received_data = ""
         self.result = result
@@ -39,19 +41,20 @@ class ClientProtocol(asyncio.Protocol):
         show_status(STATUS.DISCONNECTED, self.address)
         self.is_lost.set_result(True)
 
-async def send_simple_package(package_to_send, server_address,ssl_context=None):
+
+async def send_simple_package(package_to_send, server_address, ssl_context=None):
     loop = asyncio.get_running_loop()
     is_lost = loop.create_future()
     result = loop.create_future()
 
     transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(result,is_lost),
+        lambda: ClientProtocol(result, is_lost),
         server_address[0],
         server_address[1],
         ssl=ssl_context,
     )
 
-    send_package(transport, package_to_send)
+    send_package(transport, protocol, package_to_send)
     await result
     transport.close()
-    return result.result()
+    return result
