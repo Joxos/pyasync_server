@@ -1,4 +1,4 @@
-from loguru import logger
+from pyasync_server.common.logging import logger
 from pyasync_server.common.config import DEFAULT_COMPRESSER, COMPRESSER
 
 

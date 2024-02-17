@@ -1,25 +1,15 @@
 """
 actions.py: Main logic of actions to process after received packages.
 """
-from sys import exit
 import json
 import os
-from pyasync_server.server.config import *
-from loguru import logger
+from pyasync_server.common.logging import logger
+from pyasync_server.server.sql import establish_connection
 
-# resolve SQL connection
-if SQL_TYPE == SQLTYPE.MYSQL:
-    from pymysql import connect, Error
-elif SQL_TYPE == SQLTYPE.MARIADB:
-    from mariadb import connect, Error
-elif SQL_TYPE == SQLTYPE.NONE:
-
-    def connect(**kwargs):
-        logger.error("No SQL selected. Cannot publish any connection.")
-        exit(-1)
-
-    class Error(Exception):
-        pass
+SERVER_ADDRESS = ("127.0.0.1", 1145)
+SQL_ADDRESS = ("192.168.2.115", 3306)
+SQL_USER = "root"
+SQL_PASSWORD = "123456"
 
 
 def change_question_mark(sentence):
@@ -27,14 +17,7 @@ def change_question_mark(sentence):
 
 
 def database_test(sql):
-    try:
-        conn = connect(
-            user=SQL_USER, password=SQL_PASSWORD, host=SQL_ADDRESS, port=SQL_PORT
-        )
-    except Error as e:
-        logger.error(f"Error connecting to {SQL_TYPE.name.lower().title()}: {e}")
-        return ""
-    logger.info(f"Successfully connected to {SQL_TYPE.name.lower().title()}.")
+    conn = establish_connection(SQL_USER, SQL_PASSWORD, SQL_ADDRESS)
     cur = conn.cursor()
     cur.execute(sql)
     res = ""

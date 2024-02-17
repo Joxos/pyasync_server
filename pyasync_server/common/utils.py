@@ -2,8 +2,8 @@
 utils.py: Common utils defines here.
 """
 from asyncio import run
-from loguru import logger
-from pyasync_server.common.config import *
+from pyasync_server.common.logging import logger
+from pyasync_server.common.config import DEFAULT_CODING, ENABLE_TLS
 from pyasync_server.common.compress import compress
 from pyasync_server.common.logging import show_status, STATUS
 import ssl

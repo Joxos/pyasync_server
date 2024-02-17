@@ -10,7 +10,7 @@ from pyasync_server.common.logging import (
 )
 from pyasync_server.common.compress import compress, decompress
 from pyasync_server.server.package import unpack_and_process
-from pyasync_server.server.config import *
+from pyasync_server.common.config import DEFAULT_CODING
 
 
 # callback style server:
