@@ -45,13 +45,16 @@ def database_test(sql):
 
 # write your own actions here
 def login(username, password):
-    if not os.path.exists("users.json"):
+    if not os.path.exists("./users.json"):
+        logger.error("users.json not found. Cannot login.")
         return False
     with open("users.json", "r") as f:
         users = json.load(f)
     if username in users and users[username] == password:
+        logger.info(f"User {username} logged in.")
         return True
     else:
+        logger.error(f"Invalid username or password for user {username}.")
         return False
 
 

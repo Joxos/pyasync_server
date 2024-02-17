@@ -165,5 +165,5 @@ cython_debug/
 *#
 future/
 .vscode/
-src/server.key
-src/server.crt
+pyasync_server/server/server.key
+pyasync_server/server/server.crt

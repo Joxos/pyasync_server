@@ -3,9 +3,7 @@ client.py: High-performance async client codes.
 """
 import asyncio
 from pyasync_server.common.protocol import on_init, is_framed
-from pyasync_server.common.utils import (
-    send_package,
-)
+from pyasync_server.common.utils import send_package
 from pyasync_server.common.logging import show_status, STATUS
 from pyasync_server.common.compress import decompress
 from pyasync_server.client.package import unpack_and_process
