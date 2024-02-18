@@ -3,9 +3,9 @@ client.py: High-performance async client codes.
 """
 import asyncio
 from pyasync_server.common.protocol import on_init, is_framed
-from pyasync_server.common.utils import send_package
 from pyasync_server.common.logging import show_status, STATUS
-from pyasync_server.common.compress import decompress
+from pyasync_server.common.compress import decompress, compress
+from pyasync_server.common.config import DEFAULT_CODING
 from pyasync_server.client.package import unpack_and_process
 
 
@@ -40,19 +40,36 @@ class ClientProtocol(asyncio.Protocol):
         self.is_lost.set_result(True)
 
 
-async def send_simple_package(package_to_send, server_address, ssl_context=None):
-    loop = asyncio.get_running_loop()
-    is_lost = loop.create_future()
-    result = loop.create_future()
+class Connection:
+    """Connection class that can send and receive packages."""
 
-    transport, protocol = await loop.create_connection(
-        lambda: ClientProtocol(result, is_lost),
-        server_address[0],
-        server_address[1],
-        ssl=ssl_context,
-    )
+    def __init__(self, server_address, ssl_context=None):
+        self.server_address = server_address
+        self.ssl_context = ssl_context
+        self.transport = None
+        self.protocol = None
+        self.is_lost = None
+        self.result = None
 
-    send_package(transport, protocol, package_to_send)
-    await result
-    transport.close()
-    return result
+    async def establish(self):
+        loop = asyncio.get_running_loop()
+        self.is_lost = loop.create_future()
+        self.result = loop.create_future()
+
+        self.transport, self.protocol = await loop.create_connection(
+            lambda: ClientProtocol(self.result, self.is_lost),
+            self.server_address[0],
+            self.server_address[1],
+            ssl=self.ssl_context,
+        )
+
+    async def send_package(self, package):
+        self.transport.write(compress(bytes(package, encoding=DEFAULT_CODING)))
+        show_status(STATUS.SEND, self.protocol.address, package)
+
+    async def receive_package(self):
+        return await self.result
+
+    async def close(self):
+        self.transport.close()
+        await self.is_lost

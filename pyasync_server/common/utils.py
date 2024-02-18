@@ -3,9 +3,7 @@ utils.py: Common utils defines here.
 """
 from asyncio import run
 from pyasync_server.common.logging import logger
-from pyasync_server.common.config import DEFAULT_CODING, ENABLE_TLS
-from pyasync_server.common.compress import compress
-from pyasync_server.common.logging import show_status, STATUS
+from pyasync_server.common.config import ENABLE_TLS
 import ssl
 
 
@@ -22,11 +20,6 @@ def handle_run_main(main, server_address):
         logger.info(
             "This might caused by that TLS support is enabled on the server but not on client."
         )
-
-
-def send_package(transport, protocol, package):
-    transport.write(compress(bytes(package, encoding=DEFAULT_CODING)))
-    show_status(STATUS.SEND, protocol.address, package)
 
 
 def resolve_client_ssl_context(certfile):
