@@ -15,4 +15,4 @@ class COMPRESSER(Enum):
 # configuration starts here
 DEFAULT_COMPRESSER = COMPRESSER.NONE
 DEFAULT_CODING = "utf-8"
-ENABLE_TLS = False
+ENABLE_TLS = True

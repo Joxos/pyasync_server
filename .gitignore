@@ -167,3 +167,5 @@ future/
 .vscode/
 pyasync_server/server/server.key
 pyasync_server/server/server.crt
+server.key
+server.crt
